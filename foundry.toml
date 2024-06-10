@@ -2,5 +2,13 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+remappings = ["@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/", "openzeppelin-foundry-upgrades/=lib/openzeppelin-foundry-upgrades/src/"]
+
+solc_version = "0.8.20"
+optimizer = true
+optimizer_runs = 1000000
+ast=true
+build_info = true
+extra_output = ["storageLayout"]
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
