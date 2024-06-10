@@ -4,7 +4,7 @@ pragma solidity 0.8.20;
 import {Test, console, Vm} from "forge-std/Test.sol";
 
 import {Layer3} from "../src/Layer3.sol";
-import {Layer3V2} from "./Layer3V2.sol";
+import {Layer3MockV2} from "./mock/Layer3MockV2.sol";
 
 import {DeployProxy} from "../script/Deploy.s.sol";
 
@@ -58,9 +58,9 @@ contract Layer3Test is Test {
 
     function testUpgrade() public {
         vm.startPrank(ALICE);
-        _upgradeCube(proxyAddress);
+        _upgradeContract(proxyAddress);
 
-        Layer3V2 v2 = Layer3V2(proxyAddress);
+        Layer3MockV2 v2 = Layer3MockV2(proxyAddress);
         v2.increment();
 
         vm.stopPrank();
@@ -68,7 +68,7 @@ contract Layer3Test is Test {
         assertEq(v2.count(), 1);
     }
 
-    function _upgradeCube(address _proxyAddress) internal {
-        Upgrades.upgradeProxy(_proxyAddress, "Layer3V2.sol", new bytes(0));
+    function _upgradeContract(address _proxyAddress) internal {
+        Upgrades.upgradeProxy(_proxyAddress, "Layer3MockV2.sol", new bytes(0));
     }
 }
