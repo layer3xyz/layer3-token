@@ -34,7 +34,7 @@ contract Layer3Test is Test {
     }
 
     function testInitialSupply() public view {
-        assertEq(layer3.totalSupply(), 3_333_333_333);
+        assertEq(layer3.totalSupply(), 3_333_333_333 * 10 ** 18);
     }
 
     function testOwner() public view {
@@ -54,6 +54,28 @@ contract Layer3Test is Test {
         vm.prank(ALICE);
         layer3.transfer(BOB, 100);
         assertEq(layer3.balanceOf(BOB), 100);
+    }
+
+    function testBurn() public {
+        uint256 initialBalance = layer3.balanceOf(ALICE);
+        vm.prank(ALICE);
+        uint256 burnAmount = 100;
+        layer3.burn(burnAmount);
+
+        assertEq(layer3.balanceOf(ALICE), initialBalance - burnAmount);
+    }
+
+    function testBurnWithAllowance() public {
+        uint256 initialBalance = layer3.balanceOf(ALICE);
+        uint256 burnAmount = 50;
+
+        vm.prank(ALICE);
+        layer3.approve(BOB, burnAmount);
+
+        vm.prank(BOB);
+        layer3.burnFrom(ALICE, burnAmount);
+
+        assertEq(layer3.balanceOf(ALICE), initialBalance - burnAmount);
     }
 
     function testUpgrade() public {
